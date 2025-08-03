@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { Note, NoteData } from "../types/notes";
-axios.defaults.baseURL = "https://notehub-public.goit.study/api";
-const token = import.meta.env.VITE_NOTEHUB_TOKEN;
+axios.defaults.baseURL = 'https://notehub-public.goit.study/api';
+const token = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
 interface PaginatedResponse {
     notes: Note[]; 
@@ -11,7 +11,7 @@ interface PaginatedResponse {
 
 export const fetchNotes = async (page: number, query: string): Promise<PaginatedResponse> => {
      
-    const response = await axios.get<PaginatedResponse>("/notes", {
+    const response = await axios.get<PaginatedResponse>('/notes', {
         headers: {
             Authorization: `Bearer ${token}`,
         }, 
@@ -25,8 +25,16 @@ export const fetchNotes = async (page: number, query: string): Promise<Paginated
     });
     return response.data;
 }
+export const fetchNoteById = async (noteId: string) => {
+    const response = await axios.get<Note>(`/notes/${noteId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    return response.data;
+};
 export const createNote = async (noteData: NoteData): Promise<Note> => {
-    const response = await axios.post<Note>("/notes", noteData, {
+    const response = await axios.post<Note>('/notes', noteData, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
